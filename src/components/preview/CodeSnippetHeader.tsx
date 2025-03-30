@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface CodeSnippetHeaderProps {
   fileName: string;
