@@ -1,10 +1,15 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  
+  const isActive = (path: string) => {
+    return location.pathname === path ? "text-indigo-600" : "text-slate-700 hover:text-indigo-600";
+  };
 
   return (
     <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
@@ -22,10 +27,10 @@ const Navbar = () => {
           </div>
           
           <div className="hidden md:flex items-center space-x-6">
-            <Link to="/features" className="text-slate-700 hover:text-indigo-600">Fonctionnalités</Link>
-            <Link to="/pricing" className="text-slate-700 hover:text-indigo-600">Tarifs</Link>
-            <Link to="/documentation" className="text-slate-700 hover:text-indigo-600">Documentation</Link>
-            <Link to="/blog" className="text-slate-700 hover:text-indigo-600">Blog</Link>
+            <Link to="/configurator" className={isActive("/configurator")}>Configurateur</Link>
+            <Link to="/documentation" className={isActive("/documentation")}>Documentation</Link>
+            <Link to="/pricing" className={isActive("/pricing")}>Tarifs</Link>
+            <Link to="/blog" className={isActive("/blog")}>Blog</Link>
           </div>
           
           <div className="hidden md:flex items-center space-x-4">
@@ -58,10 +63,10 @@ const Navbar = () => {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-slate-200">
             <div className="flex flex-col space-y-3">
-              <Link to="/features" className="text-slate-700 hover:text-indigo-600 py-2">Fonctionnalités</Link>
-              <Link to="/pricing" className="text-slate-700 hover:text-indigo-600 py-2">Tarifs</Link>
-              <Link to="/documentation" className="text-slate-700 hover:text-indigo-600 py-2">Documentation</Link>
-              <Link to="/blog" className="text-slate-700 hover:text-indigo-600 py-2">Blog</Link>
+              <Link to="/configurator" className={`py-2 ${isActive("/configurator")}`}>Configurateur</Link>
+              <Link to="/documentation" className={`py-2 ${isActive("/documentation")}`}>Documentation</Link>
+              <Link to="/pricing" className={`py-2 ${isActive("/pricing")}`}>Tarifs</Link>
+              <Link to="/blog" className={`py-2 ${isActive("/blog")}`}>Blog</Link>
               <div className="pt-3 space-y-2">
                 <Button variant="outline" className="w-full border-slate-300">
                   Connexion

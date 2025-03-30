@@ -1,9 +1,12 @@
 
 import React from "react";
+import CodeSnippetHeader from "../CodeSnippetHeader";
 
 const DockerfileSnippet = () => {
   return (
-    <pre className="text-green-400 font-mono text-sm">
+    <div className="rounded-lg overflow-hidden">
+      <CodeSnippetHeader fileName="Dockerfile" language="docker" />
+      <pre className="text-green-400 font-mono text-sm p-4" data-filename="Dockerfile">
 {`# Dockerfile généré automatiquement pour une application Node.js Express
 FROM node:18-alpine AS builder
 
@@ -41,7 +44,8 @@ USER node
 
 # Lancement de l'application
 CMD ["node", "dist/main.js"]`}
-    </pre>
+      </pre>
+    </div>
   );
 };
 
