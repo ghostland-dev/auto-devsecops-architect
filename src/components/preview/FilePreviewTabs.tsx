@@ -19,9 +19,9 @@ const FilePreviewTabs = ({ activeTab, setActiveTab }: FilePreviewTabsProps) => {
   const isTablet = useIsTablet();
   
   return (
-    <div className="lg:col-span-3">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
-        <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-1' : isTablet ? 'grid-cols-3 gap-1' : 'md:grid-cols-6'}`}>
+    <div className="lg:col-span-3 mt-4 sm:mt-0">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-4 sm:mt-6">
+        <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-1 mb-2' : isTablet ? 'grid-cols-3 gap-1' : 'md:grid-cols-6'}`}>
           <TabsTrigger value="dockerfile" className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}>Dockerfile</TabsTrigger>
           <TabsTrigger value="docker-compose" className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}>docker-compose</TabsTrigger>
           <TabsTrigger value="github-action" className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}>GitHub Action</TabsTrigger>
@@ -30,27 +30,27 @@ const FilePreviewTabs = ({ activeTab, setActiveTab }: FilePreviewTabsProps) => {
           <TabsTrigger value="security" className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}>Sécurité</TabsTrigger>
         </TabsList>
         
-        <TabsContent value="dockerfile" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] sm:h-[500px] overflow-auto">
+        <TabsContent value="dockerfile" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-280px)] sm:h-[500px] overflow-auto mt-2">
           <DockerfileSnippet />
         </TabsContent>
         
-        <TabsContent value="docker-compose" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] sm:h-[500px] overflow-auto">
+        <TabsContent value="docker-compose" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-280px)] sm:h-[500px] overflow-auto mt-2">
           <DockerComposeSnippet />
         </TabsContent>
         
-        <TabsContent value="github-action" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] sm:h-[500px] overflow-auto">
+        <TabsContent value="github-action" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-280px)] sm:h-[500px] overflow-auto mt-2">
           <GitHubActionSnippet />
         </TabsContent>
         
-        <TabsContent value="kubernetes" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] sm:h-[500px] overflow-auto">
+        <TabsContent value="kubernetes" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-280px)] sm:h-[500px] overflow-auto mt-2">
           <KubernetesSnippet />
         </TabsContent>
         
-        <TabsContent value="terraform" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] sm:h-[500px] overflow-auto">
+        <TabsContent value="terraform" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-280px)] sm:h-[500px] overflow-auto mt-2">
           <TerraformSnippet />
         </TabsContent>
         
-        <TabsContent value="security" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] sm:h-[500px] overflow-auto">
+        <TabsContent value="security" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-280px)] sm:h-[500px] overflow-auto mt-2">
           <SecurityConfigSnippet />
         </TabsContent>
       </Tabs>
