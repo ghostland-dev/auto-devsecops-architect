@@ -11,10 +11,12 @@ import ConfiguratorHeader from "@/components/configurator/ConfiguratorHeader";
 import ConfiguratorTabs from "@/components/configurator/ConfiguratorTabs";
 import ConfiguratorNotes from "@/components/configurator/ConfiguratorNotes";
 import ConfiguratorNavigation from "@/components/configurator/ConfiguratorNavigation";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Configurator = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState("project");
   const [config, setConfig] = useState<ProjectConfig>({
     language: "",
@@ -119,13 +121,15 @@ const Configurator = () => {
         <ConfiguratorSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         
         <main className="flex-grow p-4 md:p-6 overflow-y-auto">
-          <ConfiguratorHeader config={config} />
+          <div className="mb-6">
+            <ConfiguratorHeader config={config} />
+          </div>
           
-          <div className="mt-4 md:mt-6">
+          <div className={`${isMobile ? 'mt-6' : 'mt-8'}`}>
             <ConfiguratorProgress config={config} />
           </div>
           
-          <div className="mt-4 md:mt-6">
+          <div className={`${isMobile ? 'mt-6' : 'mt-8'}`}>
             <ConfiguratorTabs 
               activeTab={activeTab} 
               setActiveTab={setActiveTab} 
@@ -134,18 +138,18 @@ const Configurator = () => {
             />
           </div>
           
-          <div className="mt-4 md:mt-6">
+          <div className={`${isMobile ? 'mt-6' : 'mt-8'}`}>
             <ConfiguratorNotes 
               notes={config.notes || ""} 
               onChange={handleNotesChange} 
             />
           </div>
           
-          <div className="mt-4 md:mt-6">
+          <div className={`${isMobile ? 'mt-6' : 'mt-8'}`}>
             <FilePreview config={config} />
           </div>
           
-          <div className="mt-4 md:mt-6 pb-4 md:pb-0">
+          <div className={`${isMobile ? 'mt-6 mb-8' : 'mt-8 mb-4'}`}>
             <ConfiguratorNavigation 
               activeTab={activeTab}
               navigateToNextTab={navigateToNextTab}

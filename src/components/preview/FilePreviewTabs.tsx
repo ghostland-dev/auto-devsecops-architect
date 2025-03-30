@@ -20,14 +20,14 @@ const FilePreviewTabs = ({ activeTab, setActiveTab }: FilePreviewTabsProps) => {
   
   return (
     <div className="lg:col-span-3">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-4">
-        <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-y-1' : isTablet ? 'grid-cols-3 gap-y-1' : 'md:grid-cols-6'}`}>
-          <TabsTrigger value="dockerfile" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>Dockerfile</TabsTrigger>
-          <TabsTrigger value="docker-compose" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>docker-compose</TabsTrigger>
-          <TabsTrigger value="github-action" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>GitHub Action</TabsTrigger>
-          <TabsTrigger value="kubernetes" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>Kubernetes</TabsTrigger>
-          <TabsTrigger value="terraform" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>Terraform</TabsTrigger>
-          <TabsTrigger value="security" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>Sécurité</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
+        <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-1' : isTablet ? 'grid-cols-3 gap-1' : 'md:grid-cols-6'}`}>
+          <TabsTrigger value="dockerfile" className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}>Dockerfile</TabsTrigger>
+          <TabsTrigger value="docker-compose" className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}>docker-compose</TabsTrigger>
+          <TabsTrigger value="github-action" className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}>GitHub Action</TabsTrigger>
+          <TabsTrigger value="kubernetes" className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}>Kubernetes</TabsTrigger>
+          <TabsTrigger value="terraform" className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}>Terraform</TabsTrigger>
+          <TabsTrigger value="security" className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}>Sécurité</TabsTrigger>
         </TabsList>
         
         <TabsContent value="dockerfile" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] sm:h-[500px] overflow-auto">

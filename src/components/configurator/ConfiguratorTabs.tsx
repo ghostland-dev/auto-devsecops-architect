@@ -48,49 +48,49 @@ const ConfiguratorTabs = ({
   ];
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
-      <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-y-1' : isTablet ? 'grid-cols-4 gap-y-1' : 'md:grid-cols-8'}`}>
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-8">
+      <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-1' : isTablet ? 'grid-cols-4 gap-1' : 'md:grid-cols-8'}`}>
         {tabs.map(tab => (
           <TabsTrigger 
             key={tab.id}
             value={tab.id}
             disabled={isTabDisabled(tab.id)}
-            className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}
+            className={isMobile || isTablet ? 'text-xs py-1 px-1.5' : ''}
           >
             {tab.label}
           </TabsTrigger>
         ))}
       </TabsList>
       
-      <TabsContent value="project" className="pt-4">
+      <TabsContent value="project" className="pt-6">
         <ProjectDetailsStep config={config} updateConfig={updateConfig} />
       </TabsContent>
       
-      <TabsContent value="language" className="pt-4">
+      <TabsContent value="language" className="pt-6">
         <LanguageFrameworkStep config={config} updateConfig={updateConfig} />
       </TabsContent>
 
-      <TabsContent value="language-details" className="pt-4">
+      <TabsContent value="language-details" className="pt-6">
         <LanguageDetailsStep config={config} updateConfig={updateConfig} />
       </TabsContent>
       
-      <TabsContent value="cicd" className="pt-4">
+      <TabsContent value="cicd" className="pt-6">
         <CiCdStep config={config} updateConfig={updateConfig} />
       </TabsContent>
       
-      <TabsContent value="cloud" className="pt-4">
+      <TabsContent value="cloud" className="pt-6">
         <CloudProviderStep config={config} updateConfig={updateConfig} />
       </TabsContent>
       
-      <TabsContent value="deployment" className="pt-4">
+      <TabsContent value="deployment" className="pt-6">
         <DeploymentStep config={config} updateConfig={updateConfig} />
       </TabsContent>
       
-      <TabsContent value="security" className="pt-4">
+      <TabsContent value="security" className="pt-6">
         <SecurityStep config={config} updateConfig={updateConfig} />
       </TabsContent>
 
-      <TabsContent value="delivery" className="pt-4">
+      <TabsContent value="delivery" className="pt-6">
         <DeliveryMethodStep config={config} updateConfig={updateConfig} />
       </TabsContent>
     </Tabs>
