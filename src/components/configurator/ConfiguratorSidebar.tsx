@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Code, GitBranch, Cloud, Server, Shield } from "lucide-react";
+import { Code, GitBranch, Cloud, Server, Shield, PackageOpen, Send, FileText } from "lucide-react";
 
 interface ConfiguratorSidebarProps {
   activeTab: string;
@@ -12,9 +12,19 @@ interface ConfiguratorSidebarProps {
 const ConfiguratorSidebar = ({ activeTab, setActiveTab }: ConfiguratorSidebarProps) => {
   const steps = [
     {
+      id: "project",
+      name: "Projet & Organisation",
+      icon: <FileText className="h-5 w-5" />,
+    },
+    {
       id: "language",
       name: "Langage & Framework",
       icon: <Code className="h-5 w-5" />,
+    },
+    {
+      id: "language-details",
+      name: "Détails techniques",
+      icon: <PackageOpen className="h-5 w-5" />,
     },
     {
       id: "cicd",
@@ -36,10 +46,15 @@ const ConfiguratorSidebar = ({ activeTab, setActiveTab }: ConfiguratorSidebarPro
       name: "Sécurité",
       icon: <Shield className="h-5 w-5" />,
     },
+    {
+      id: "delivery",
+      name: "Livraison",
+      icon: <Send className="h-5 w-5" />,
+    },
   ];
 
   return (
-    <aside className="w-64 bg-slate-50 border-r border-slate-200 p-4 space-y-4">
+    <aside className="w-64 bg-slate-50 border-r border-slate-200 p-4 space-y-4 overflow-y-auto">
       <h2 className="text-xl font-bold mb-6">Étapes</h2>
       
       <div className="space-y-2">
