@@ -8,6 +8,7 @@ import LanguageFrameworkStep from "@/components/configurator/LanguageFrameworkSt
 import CiCdStep from "@/components/configurator/CiCdStep";
 import CloudProviderStep from "@/components/configurator/CloudProviderStep";
 import DeploymentStep from "@/components/configurator/DeploymentStep";
+import SecurityStep from "@/components/configurator/SecurityStep";
 import FilePreview from "@/components/configurator/FilePreview";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
@@ -29,6 +30,15 @@ const Configurator = () => {
     environments: ["dev"],
     containerRegistry: "",
     repositoryUrl: "",
+    securityOptions: {
+      staticAnalysis: [],
+      secretsManagement: "",
+      complianceStandards: [],
+      containerScan: false,
+      sbomGeneration: false,
+      zeroTrustNetworking: false,
+      autoVulnPatching: false,
+    }
   });
 
   const updateConfig = (partialConfig: Partial<ProjectConfig>) => {
@@ -60,11 +70,12 @@ const Configurator = () => {
           <h1 className="text-3xl font-bold mb-6">Configuration de votre projet DevSecOps</h1>
           
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="language">Langage & Framework</TabsTrigger>
               <TabsTrigger value="cicd">CI/CD</TabsTrigger>
               <TabsTrigger value="cloud">Cloud Provider</TabsTrigger>
               <TabsTrigger value="deployment">Déploiement</TabsTrigger>
+              <TabsTrigger value="security">Sécurité</TabsTrigger>
             </TabsList>
             
             <TabsContent value="language">
@@ -82,6 +93,10 @@ const Configurator = () => {
             <TabsContent value="deployment">
               <DeploymentStep config={config} updateConfig={updateConfig} />
             </TabsContent>
+            
+            <TabsContent value="security">
+              <SecurityStep config={config} updateConfig={updateConfig} />
+            </TabsContent>
           </Tabs>
           
           <div className="mt-12">
@@ -93,7 +108,7 @@ const Configurator = () => {
               <Button 
                 variant="outline" 
                 onClick={() => {
-                  const tabs = ["language", "cicd", "cloud", "deployment"];
+                  const tabs = ["language", "cicd", "cloud", "deployment", "security"];
                   const currentIndex = tabs.indexOf(activeTab);
                   setActiveTab(tabs[currentIndex - 1]);
                 }}
@@ -102,11 +117,11 @@ const Configurator = () => {
               </Button>
             )}
             
-            {activeTab !== "deployment" ? (
+            {activeTab !== "security" ? (
               <Button 
                 className="ml-auto"
                 onClick={() => {
-                  const tabs = ["language", "cicd", "cloud", "deployment"];
+                  const tabs = ["language", "cicd", "cloud", "deployment", "security"];
                   const currentIndex = tabs.indexOf(activeTab);
                   setActiveTab(tabs[currentIndex + 1]);
                 }}

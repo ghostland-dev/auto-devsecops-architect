@@ -11,4 +11,15 @@ export interface ProjectConfig {
   environments: string[];
   containerRegistry: string;
   repositoryUrl: string;
+  
+  // Nouvelles options de sécurité
+  securityOptions: {
+    staticAnalysis: string[];
+    secretsManagement: string;
+    complianceStandards: string[];
+    containerScan: boolean;
+    sbomGeneration: boolean;
+    zeroTrustNetworking: boolean;
+    autoVulnPatching: boolean;
+  };
 }

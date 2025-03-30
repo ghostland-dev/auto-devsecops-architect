@@ -6,6 +6,7 @@ import DockerComposeSnippet from "./code-snippets/DockerComposeSnippet";
 import GitHubActionSnippet from "./code-snippets/GitHubActionSnippet";
 import KubernetesSnippet from "./code-snippets/KubernetesSnippet";
 import TerraformSnippet from "./code-snippets/TerraformSnippet";
+import SecurityConfigSnippet from "./code-snippets/SecurityConfigSnippet";
 
 interface FilePreviewTabsProps {
   activeTab: string;
@@ -16,12 +17,13 @@ const FilePreviewTabs = ({ activeTab, setActiveTab }: FilePreviewTabsProps) => {
   return (
     <div className="lg:col-span-3">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="dockerfile">Dockerfile</TabsTrigger>
           <TabsTrigger value="docker-compose">docker-compose</TabsTrigger>
           <TabsTrigger value="github-action">GitHub Action</TabsTrigger>
           <TabsTrigger value="kubernetes">Kubernetes</TabsTrigger>
           <TabsTrigger value="terraform">Terraform</TabsTrigger>
+          <TabsTrigger value="security">Sécurité</TabsTrigger>
         </TabsList>
         
         <TabsContent value="dockerfile" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] overflow-auto">
@@ -42,6 +44,10 @@ const FilePreviewTabs = ({ activeTab, setActiveTab }: FilePreviewTabsProps) => {
         
         <TabsContent value="terraform" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] overflow-auto">
           <TerraformSnippet />
+        </TabsContent>
+        
+        <TabsContent value="security" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] overflow-auto">
+          <SecurityConfigSnippet />
         </TabsContent>
       </Tabs>
     </div>
