@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ConfiguratorSidebar from "@/components/configurator/ConfiguratorSidebar";
@@ -16,6 +16,12 @@ import FilePreview from "@/components/configurator/FilePreview";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import { ProjectConfig } from "@/types/configurator";
+import NotesInput from "@/components/configurator/NotesInput";
+import ConfigDetailSheet from "@/components/configurator/ConfigDetailSheet";
+import { Card, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Info, HelpCircle, Check } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const Configurator = () => {
   const { toast } = useToast();
@@ -33,6 +39,7 @@ const Configurator = () => {
     environments: ["dev"],
     containerRegistry: "",
     repositoryUrl: "",
+    notes: "",
     securityOptions: {
       staticAnalysis: [],
       secretsManagement: "",
@@ -100,6 +107,26 @@ const Configurator = () => {
   };
 
   const isLastTab = activeTab === "delivery";
+  
+  // Calculate completion percentage
+  const calculateCompletionPercentage = () => {
+    const requiredFields = [
+      !!config.language,
+      !!config.framework,
+      !!config.ciCdProvider,
+      !!config.cloudProvider,
+      !!config.deploymentType,
+      !!config.database,
+      config.project?.name ? true : false,
+      config.organization?.name ? true : false,
+      config.deliveryMethod?.type ? true : false
+    ];
+    
+    const completedFields = requiredFields.filter(field => field).length;
+    return Math.round((completedFields / requiredFields.length) * 100);
+  };
+
+  const completionPercentage = calculateCompletionPercentage();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -107,8 +134,40 @@ const Configurator = () => {
       <div className="flex-grow flex">
         <ConfiguratorSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         
-        <main className="flex-grow p-6">
-          <h1 className="text-3xl font-bold mb-6">Configuration de votre projet DevSecOps</h1>
+        <main className="flex-grow p-6 overflow-y-auto">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-3xl font-bold">Configuration de votre projet DevSecOps</h1>
+            <ConfigDetailSheet config={config} />
+          </div>
+          
+          <Card className="mb-6">
+            <CardContent className="p-4">
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium">Progression: {completionPercentage}%</span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Remplissez les champs obligatoires pour avancer</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+                <div className="flex items-center gap-2">
+                  {completionPercentage === 100 && (
+                    <div className="flex items-center text-emerald-600 text-sm gap-1">
+                      <Check className="h-4 w-4" />
+                      <span>Configuration complète</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <Progress value={completionPercentage} className="h-2" />
+            </CardContent>
+          </Card>
           
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-4 md:grid-cols-8">
@@ -156,7 +215,26 @@ const Configurator = () => {
             </TabsContent>
           </Tabs>
           
-          <div className="mt-12">
+          <div className="mt-8 mb-4">
+            <Card className="bg-slate-50">
+              <CardContent className="p-4">
+                <div className="flex items-start gap-2">
+                  <Info className="h-5 w-5 text-blue-600 mt-1 flex-shrink-0" />
+                  <div>
+                    <h3 className="font-medium mb-1">Notes du projet</h3>
+                    <NotesInput 
+                      value={config.notes || ""} 
+                      onChange={(notes) => updateConfig({ notes })}
+                      placeholder="Ajoutez ici des notes ou instructions spécifiques pour votre configuration DevSecOps..."
+                      description="Ces notes seront incluses dans la documentation générée et peuvent servir comme référence pour votre équipe."
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="mt-6">
             <FilePreview config={config} />
           </div>
           
@@ -181,6 +259,7 @@ const Configurator = () => {
               <Button 
                 className="ml-auto bg-emerald-600 hover:bg-emerald-700"
                 onClick={handleGenerateFiles}
+                disabled={completionPercentage < 80}
               >
                 Générer les fichiers
               </Button>
