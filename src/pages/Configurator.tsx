@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import ConfiguratorSidebar from "@/components/configurator/ConfiguratorSidebar";
@@ -12,54 +12,16 @@ import ConfiguratorTabs from "@/components/configurator/ConfiguratorTabs";
 import ConfiguratorNotes from "@/components/configurator/ConfiguratorNotes";
 import ConfiguratorNavigation from "@/components/configurator/ConfiguratorNavigation";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useConfigStore } from "@/stores/configStore";
 
 const Configurator = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState("project");
-  const [config, setConfig] = useState<ProjectConfig>({
-    language: "",
-    framework: "",
-    ciCdProvider: "",
-    cloudProvider: "",
-    deploymentType: "",
-    database: "",
-    useRedis: false,
-    useRabbitMq: false,
-    environments: ["dev"],
-    containerRegistry: "",
-    repositoryUrl: "",
-    notes: "",
-    securityOptions: {
-      staticAnalysis: [],
-      secretsManagement: "",
-      complianceStandards: [],
-      containerScan: false,
-      sbomGeneration: false,
-      zeroTrustNetworking: false,
-      autoVulnPatching: false,
-    }
-  });
-
-  const updateConfig = (partialConfig: Partial<ProjectConfig>) => {
-    setConfig({
-      ...config,
-      ...partialConfig
-    });
-  };
-
-  const handleGenerateFiles = () => {
-    toast({
-      title: "Génération en cours",
-      description: "Vos fichiers DevSecOps sont en cours de génération...",
-    });
-    
-    // Simulate file generation delay
-    setTimeout(() => {
-      navigate("/preview");
-    }, 2000);
-  };
+  
+  const config = useConfigStore(state => state.config);
+  const updateConfig = useConfigStore(state => state.updateConfig);
 
   const getTabs = () => [
     { id: "project", label: "Projet & Organisation" },
@@ -112,6 +74,18 @@ const Configurator = () => {
 
   const handleNotesChange = (notes: string) => {
     updateConfig({ notes });
+  };
+
+  const handleGenerateFiles = () => {
+    toast({
+      title: "Génération en cours",
+      description: "Vos fichiers DevSecOps sont en cours de génération...",
+    });
+    
+    // Simulate file generation delay
+    setTimeout(() => {
+      navigate("/preview");
+    }, 2000);
   };
 
   return (

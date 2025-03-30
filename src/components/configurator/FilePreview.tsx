@@ -1,8 +1,9 @@
-
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProjectConfig } from "@/types/configurator";
+import { generateDockerfile } from "@/utils/docker/generateDockerfile";
+import { generateDockerCompose } from "@/utils/docker/generateDockerCompose";
 
 interface FilePreviewProps {
   config: ProjectConfig;
@@ -12,154 +13,11 @@ const FilePreview = ({ config }: FilePreviewProps) => {
   const [activeTab, setActiveTab] = useState("dockerfile");
   
   const getDockerfilePreview = () => {
-    if (!config.language) return "# Sélectionnez un langage pour voir un aperçu du Dockerfile";
-    
-    if (config.language === "nodejs") {
-      return `# Dockerfile généré pour Node.js${config.framework ? ` (${config.framework})` : ''}
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-# Copie des fichiers package.json et installation des dépendances
-COPY package*.json ./
-RUN npm ci
-
-# Copie du code source
-COPY . .
-
-# Build de l'application
-RUN npm run build
-
-# Étape de production
-FROM node:18-alpine AS production
-
-WORKDIR /app
-
-# Copie des fichiers nécessaires depuis l'étape de build
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-
-# Configuration des variables d'environnement
-ENV NODE_ENV=production
-ENV PORT=3000
-
-# Exposition du port
-EXPOSE 3000
-
-# Utilisateur non-root pour la sécurité
-USER node
-
-# Lancement de l'application
-CMD ["node", "dist/main.js"]`;
-    } else if (config.language === "python") {
-      return `# Dockerfile généré pour Python${config.framework ? ` (${config.framework})` : ''}
-FROM python:3.11-slim AS builder
-
-WORKDIR /app
-
-# Installation des dépendances
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copie du code source
-COPY . .
-
-# Étape de production
-FROM python:3.11-slim
-
-WORKDIR /app
-
-# Copie des dépendances et du code
-COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
-COPY --from=builder /app .
-
-# Configuration des variables d'environnement
-ENV PYTHONUNBUFFERED=1
-ENV PORT=8000
-
-# Exposition du port
-EXPOSE 8000
-
-# Utilisateur non-root pour la sécurité
-RUN useradd -m appuser
-USER appuser
-
-# Lancement de l'application
-CMD ["python", "app.py"]`;
-    } else if (config.language === "java") {
-      return `# Dockerfile généré pour Java${config.framework ? ` (${config.framework})` : ''}
-FROM maven:3.8-openjdk-17 AS builder
-
-WORKDIR /app
-
-# Copie du fichier pom.xml
-COPY pom.xml .
-# Téléchargement des dépendances
-RUN mvn dependency:go-offline
-
-# Copie du code source
-COPY src ./src
-
-# Build de l'application
-RUN mvn package -DskipTests
-
-# Étape de production
-FROM openjdk:17-slim
-
-WORKDIR /app
-
-# Copie du jar depuis l'étape de build
-COPY --from=builder /app/target/*.jar app.jar
-
-# Exposition du port
-EXPOSE 8080
-
-# Utilisateur non-root pour la sécurité
-RUN useradd -m appuser
-USER appuser
-
-# Lancement de l'application
-CMD ["java", "-jar", "app.jar"]`;
-    } else if (config.language === "go") {
-      return `# Dockerfile généré pour Go${config.framework ? ` (${config.framework})` : ''}
-FROM golang:1.19-alpine AS builder
-
-WORKDIR /app
-
-# Copie des fichiers de dépendances
-COPY go.mod go.sum ./
-RUN go mod download
-
-# Copie du code source
-COPY . .
-
-# Build de l'application
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
-
-# Étape de production
-FROM alpine:3.17
-
-WORKDIR /app
-
-# Installation des certificats CA
-RUN apk --no-cache add ca-certificates
-
-# Copie de l'exécutable
-COPY --from=builder /app/app .
-
-# Exposition du port
-EXPOSE 8080
-
-# Utilisateur non-root pour la sécurité
-RUN adduser -D appuser
-USER appuser
-
-# Lancement de l'application
-CMD ["./app"]`;
-    }
-    
-    return "# Sélectionnez un langage pour voir un aperçu du Dockerfile";
+    return generateDockerfile(config);
+  };
+  
+  const getDockerComposePreview = () => {
+    return generateDockerCompose(config);
   };
   
   const getCiCdPreview = () => {
@@ -726,6 +584,8 @@ ${config.useRedis ? `resource "google_redis_instance" "cache" {
     switch (activeTab) {
       case "dockerfile":
         return getDockerfilePreview();
+      case "docker-compose":
+        return getDockerComposePreview();
       case "cicd":
         return getCiCdPreview();
       case "kubernetes":
@@ -739,6 +599,7 @@ ${config.useRedis ? `resource "google_redis_instance" "cache" {
   
   const isTabDisabled = (tab: string) => {
     if (tab === "dockerfile" && !config.language) return true;
+    if (tab === "docker-compose" && !config.language) return true;
     if (tab === "cicd" && !config.ciCdProvider) return true;
     if (tab === "kubernetes" && !config.deploymentType) return true;
     if (tab === "terraform" && !config.cloudProvider) return true;
@@ -751,9 +612,12 @@ ${config.useRedis ? `resource "google_redis_instance" "cache" {
         <h2 className="text-xl font-bold mb-4">Aperçu des fichiers générés</h2>
         
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="dockerfile" disabled={isTabDisabled("dockerfile")}>
               Dockerfile
+            </TabsTrigger>
+            <TabsTrigger value="docker-compose" disabled={isTabDisabled("docker-compose")}>
+              docker-compose
             </TabsTrigger>
             <TabsTrigger value="cicd" disabled={isTabDisabled("cicd")}>
               CI/CD
