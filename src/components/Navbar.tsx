@@ -2,10 +2,12 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const isMobile = useIsMobile();
   
   const isActive = (path: string) => {
     return location.pathname === path ? "text-indigo-600" : "text-slate-700 hover:text-indigo-600";
@@ -22,7 +24,7 @@ const Navbar = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                 </svg>
               </div>
-              <span className="text-xl font-bold text-slate-900">DevSecOps Generator</span>
+              <span className={`text-xl font-bold text-slate-900 ${isMobile ? 'text-sm' : ''}`}>DevSecOps Generator</span>
             </Link>
           </div>
           
@@ -61,12 +63,12 @@ const Navbar = () => {
         </div>
         
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-slate-200">
+          <div className="md:hidden py-4 border-t border-slate-200 animate-fade-in">
             <div className="flex flex-col space-y-3">
-              <Link to="/configurator" className={`py-2 ${isActive("/configurator")}`}>Configurateur</Link>
-              <Link to="/documentation" className={`py-2 ${isActive("/documentation")}`}>Documentation</Link>
-              <Link to="/pricing" className={`py-2 ${isActive("/pricing")}`}>Tarifs</Link>
-              <Link to="/blog" className={`py-2 ${isActive("/blog")}`}>Blog</Link>
+              <Link to="/configurator" className={`py-2 ${isActive("/configurator")}`} onClick={() => setMobileMenuOpen(false)}>Configurateur</Link>
+              <Link to="/documentation" className={`py-2 ${isActive("/documentation")}`} onClick={() => setMobileMenuOpen(false)}>Documentation</Link>
+              <Link to="/pricing" className={`py-2 ${isActive("/pricing")}`} onClick={() => setMobileMenuOpen(false)}>Tarifs</Link>
+              <Link to="/blog" className={`py-2 ${isActive("/blog")}`} onClick={() => setMobileMenuOpen(false)}>Blog</Link>
               <div className="pt-3 space-y-2">
                 <Button variant="outline" className="w-full border-slate-300">
                   Connexion

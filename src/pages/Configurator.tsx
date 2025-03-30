@@ -115,38 +115,46 @@ const Configurator = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-grow flex">
+      <div className="flex-grow flex flex-col md:flex-row relative">
         <ConfiguratorSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         
-        <main className="flex-grow p-6 overflow-y-auto">
+        <main className="flex-grow p-4 md:p-6 overflow-y-auto">
           <ConfiguratorHeader config={config} />
           
-          <ConfiguratorProgress config={config} />
+          <div className="mt-4 md:mt-6">
+            <ConfiguratorProgress config={config} />
+          </div>
           
-          <ConfiguratorTabs 
-            activeTab={activeTab} 
-            setActiveTab={setActiveTab} 
-            config={config} 
-            updateConfig={updateConfig} 
-          />
+          <div className="mt-4 md:mt-6">
+            <ConfiguratorTabs 
+              activeTab={activeTab} 
+              setActiveTab={setActiveTab} 
+              config={config} 
+              updateConfig={updateConfig} 
+            />
+          </div>
           
-          <ConfiguratorNotes 
-            notes={config.notes || ""} 
-            onChange={handleNotesChange} 
-          />
+          <div className="mt-4 md:mt-6">
+            <ConfiguratorNotes 
+              notes={config.notes || ""} 
+              onChange={handleNotesChange} 
+            />
+          </div>
           
-          <div className="mt-6">
+          <div className="mt-4 md:mt-6">
             <FilePreview config={config} />
           </div>
           
-          <ConfiguratorNavigation 
-            activeTab={activeTab}
-            navigateToNextTab={navigateToNextTab}
-            navigateToPrevTab={navigateToPrevTab}
-            handleGenerateFiles={handleGenerateFiles}
-            isLastTab={isLastTab}
-            completionPercentage={completionPercentage}
-          />
+          <div className="mt-4 md:mt-6 pb-4 md:pb-0">
+            <ConfiguratorNavigation 
+              activeTab={activeTab}
+              navigateToNextTab={navigateToNextTab}
+              navigateToPrevTab={navigateToPrevTab}
+              handleGenerateFiles={handleGenerateFiles}
+              isLastTab={isLastTab}
+              completionPercentage={completionPercentage}
+            />
+          </div>
         </main>
       </div>
     </div>

@@ -9,6 +9,7 @@ import DeploymentStep from "@/components/configurator/DeploymentStep";
 import SecurityStep from "@/components/configurator/SecurityStep";
 import ProjectDetailsStep from "@/components/configurator/ProjectDetailsStep";
 import DeliveryMethodStep from "@/components/configurator/DeliveryMethodStep";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ConfiguratorTabsProps {
   activeTab: string;
@@ -23,6 +24,8 @@ const ConfiguratorTabs = ({
   config,
   updateConfig
 }: ConfiguratorTabsProps) => {
+  const isMobile = useIsMobile();
+  
   const isTabDisabled = (tabId: string) => {
     switch (tabId) {
       case "language-details":
@@ -33,11 +36,11 @@ const ConfiguratorTabs = ({
   };
 
   const tabs = [
-    { id: "project", label: "Projet & Organisation" },
-    { id: "language", label: "Langage & Framework" },
-    { id: "language-details", label: "Détails techniques" },
+    { id: "project", label: "Projet" },
+    { id: "language", label: "Langage" },
+    { id: "language-details", label: "Détails" },
     { id: "cicd", label: "CI/CD" },
-    { id: "cloud", label: "Cloud Provider" },
+    { id: "cloud", label: "Cloud" },
     { id: "deployment", label: "Déploiement" },
     { id: "security", label: "Sécurité" },
     { id: "delivery", label: "Livraison" },
@@ -45,7 +48,7 @@ const ConfiguratorTabs = ({
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className="grid w-full grid-cols-4 md:grid-cols-8">
+      <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-y-1' : 'md:grid-cols-8'}`}>
         {tabs.map(tab => (
           <TabsTrigger 
             key={tab.id}

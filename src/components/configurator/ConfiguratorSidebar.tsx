@@ -3,6 +3,9 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Code, GitBranch, Cloud, Server, Shield, PackageOpen, Send, FileText } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
 
 interface ConfiguratorSidebarProps {
   activeTab: string;
@@ -10,6 +13,8 @@ interface ConfiguratorSidebarProps {
 }
 
 const ConfiguratorSidebar = ({ activeTab, setActiveTab }: ConfiguratorSidebarProps) => {
+  const isMobile = useIsMobile();
+  
   const steps = [
     {
       id: "project",
@@ -53,28 +58,46 @@ const ConfiguratorSidebar = ({ activeTab, setActiveTab }: ConfiguratorSidebarPro
     },
   ];
 
-  return (
-    <aside className="w-64 bg-slate-50 border-r border-slate-200 p-4 space-y-4 overflow-y-auto">
+  const SidebarContent = () => (
+    <div className="space-y-2">
       <h2 className="text-xl font-bold mb-6">Étapes</h2>
-      
-      <div className="space-y-2">
-        {steps.map((step, index) => (
-          <Button 
-            key={step.id}
-            variant="ghost"
-            className={cn(
-              "w-full justify-start gap-2",
-              activeTab === step.id && "bg-slate-200 hover:bg-slate-300"
-            )}
-            onClick={() => setActiveTab(step.id)}
-          >
-            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-700">
-              {step.icon}
-            </div>
-            <span>{step.name}</span>
+      {steps.map((step) => (
+        <Button 
+          key={step.id}
+          variant="ghost"
+          className={cn(
+            "w-full justify-start gap-2",
+            activeTab === step.id && "bg-slate-200 hover:bg-slate-300"
+          )}
+          onClick={() => setActiveTab(step.id)}
+        >
+          <div className="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-100 text-indigo-700">
+            {step.icon}
+          </div>
+          <span>{step.name}</span>
+        </Button>
+      ))}
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="icon" className="fixed top-20 left-4 z-40 md:hidden">
+            <Menu className="h-5 w-5" />
           </Button>
-        ))}
-      </div>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-72 pt-12">
+          <SidebarContent />
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
+  return (
+    <aside className="hidden md:block w-64 bg-slate-50 border-r border-slate-200 p-4 space-y-4 overflow-y-auto">
+      <SidebarContent />
     </aside>
   );
 };
