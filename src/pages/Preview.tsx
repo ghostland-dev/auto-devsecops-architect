@@ -124,8 +124,7 @@ EXPOSE 3000
 USER node
 
 # Lancement de l'application
-CMD ["node", "dist/main.js"]
-`}
+CMD ["node", "dist/main.js"]`}
                 </pre>
               </TabsContent>
               
@@ -201,8 +200,7 @@ networks:
 
 volumes:
   postgres-data:
-  redis-data:
-`}
+  redis-data:`}
                 </pre>
               </TabsContent>
               
@@ -333,8 +331,7 @@ jobs:
           kubectl apply -f k8s/deployment.yml
           kubectl apply -f k8s/service.yml
           kubectl apply -f k8s/ingress.yml
-          kubectl rollout status deployment/myapp
-`}
+          kubectl rollout status deployment/myapp`}
                 </pre>
               </TabsContent>
               
@@ -464,8 +461,7 @@ spec:
           service:
             name: myapp-service
             port:
-              number: 80
-`}
+              number: 80`}
                 </pre>
               </TabsContent>
               
@@ -568,7 +564,7 @@ module "security_group_rds" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
 
-  name        = "${var.db_identifier}-sg"
+  name        = "\${var.db_identifier}-sg"
   description = "PostgreSQL security group"
   vpc_id      = module.vpc.vpc_id
 
@@ -638,8 +634,7 @@ output "s3_bucket_name" {
 output "vpc_id" {
   description = "VPC ID"
   value       = module.vpc.vpc_id
-}
-`}
+}`}
                 </pre>
               </TabsContent>
             </Tabs>
