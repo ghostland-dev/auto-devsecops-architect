@@ -7,6 +7,9 @@ export interface Organization {
   contactEmail?: string;
   logo?: string;
   website?: string;
+  projects?: Project[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Project {
@@ -19,6 +22,36 @@ export interface Project {
   endDate?: string;
   tags?: string[];
   priority?: "low" | "medium" | "high";
+  configurations?: ProjectConfig[];
+  microservices?: Microservice[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface Microservice {
+  name: string;
+  id: string;
+  description?: string;
+  language: string;
+  framework: string;
+  port: number;
+  dependencies?: string[];
+  volumes?: Volume[];
+  environmentVariables?: EnvironmentVariable[];
+}
+
+export interface Volume {
+  name: string;
+  mountPath: string;
+  type: "local" | "persistent" | "configMap" | "secret";
+  size?: string;
+}
+
+export interface EnvironmentVariable {
+  name: string;
+  value: string;
+  environment: "all" | "dev" | "staging" | "prod";
+  isSecret: boolean;
 }
 
 export interface DeliveryMethod {
@@ -65,7 +98,81 @@ export interface EnvironmentConfig {
   };
 }
 
+export interface KubernetesConfig {
+  namespace?: string;
+  deploymentStrategy?: "RollingUpdate" | "Recreate";
+  replicas?: number;
+  serviceType?: "ClusterIP" | "NodePort" | "LoadBalancer";
+  ingressEnabled?: boolean;
+  ingressDomain?: string;
+  configMaps?: Record<string, Record<string, string>>;
+  secrets?: Record<string, Record<string, string>>;
+  persistentVolumes?: PersistentVolumeConfig[];
+  autoscaling?: {
+    enabled: boolean;
+    minReplicas?: number;
+    maxReplicas?: number;
+    targetCPUUtilizationPercentage?: number;
+  };
+  networkPolicies?: NetworkPolicyConfig[];
+}
+
+export interface PersistentVolumeConfig {
+  name: string;
+  size: string;
+  storageClassName?: string;
+  accessModes?: string[];
+}
+
+export interface NetworkPolicyConfig {
+  name: string;
+  podSelector: Record<string, string>;
+  ingress?: {
+    from: {
+      namespaceSelector?: Record<string, string>;
+      podSelector?: Record<string, string>;
+    }[];
+  }[];
+  egress?: {
+    to: {
+      namespaceSelector?: Record<string, string>;
+      podSelector?: Record<string, string>;
+    }[];
+  }[];
+}
+
+export interface TerraformConfig {
+  provider: "aws" | "gcp" | "azure" | "oci";
+  region?: string;
+  resourcePrefix?: string;
+  vpcCidr?: string;
+  subnets?: string[];
+  modules?: {
+    name: string;
+    source: string;
+    version?: string;
+    variables?: Record<string, any>;
+  }[];
+  outputs?: string[];
+  backendType?: "s3" | "gcs" | "azurerm" | "local";
+  backendConfig?: Record<string, string>;
+}
+
+export interface CICDStage {
+  name: string;
+  type: "build" | "test" | "security" | "deploy";
+  commands: string[];
+  dependencies?: string[];
+  environment?: string;
+  conditions?: string[];
+}
+
 export interface ProjectConfig {
+  id?: string;
+  version?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  
   language: string;
   framework: string;
   ciCdProvider: string;
@@ -74,6 +181,7 @@ export interface ProjectConfig {
   database: string;
   useRedis: boolean;
   useRabbitMq: boolean;
+  useKafka?: boolean;
   environments: string[];
   containerRegistry: string;
   repositoryUrl: string;
@@ -87,6 +195,18 @@ export interface ProjectConfig {
   // Organization and project info
   organization?: Organization;
   project?: Project;
+  
+  // New configurations
+  microservices?: Microservice[];
+  
+  // Kubernetes configuration
+  kubernetesConfig?: KubernetesConfig;
+  
+  // Terraform configuration
+  terraformConfig?: TerraformConfig;
+  
+  // CI/CD pipeline stages
+  cicdStages?: CICDStage[];
   
   // Delivery method
   deliveryMethod?: DeliveryMethod;
@@ -105,4 +225,26 @@ export interface ProjectConfig {
     customSecurityPolicies?: string;
     securityContactEmail?: string;
   };
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  organizations: Organization[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GenerationHistory {
+  id: string;
+  projectId: string;
+  configId: string;
+  timestamp: string;
+  files: {
+    name: string;
+    content: string;
+    type: "dockerfile" | "docker-compose" | "kubernetes" | "terraform" | "cicd" | "other";
+  }[];
 }
