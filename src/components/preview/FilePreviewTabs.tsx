@@ -7,7 +7,7 @@ import GitHubActionSnippet from "./code-snippets/GitHubActionSnippet";
 import KubernetesSnippet from "./code-snippets/KubernetesSnippet";
 import TerraformSnippet from "./code-snippets/TerraformSnippet";
 import SecurityConfigSnippet from "./code-snippets/SecurityConfigSnippet";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile, useIsTablet } from "@/hooks/use-mobile";
 
 interface FilePreviewTabsProps {
   activeTab: string;
@@ -16,17 +16,18 @@ interface FilePreviewTabsProps {
 
 const FilePreviewTabs = ({ activeTab, setActiveTab }: FilePreviewTabsProps) => {
   const isMobile = useIsMobile();
+  const isTablet = useIsTablet();
   
   return (
     <div className="lg:col-span-3">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-y-1' : 'sm:grid-cols-3 md:grid-cols-6'}`}>
-          <TabsTrigger value="dockerfile">Dockerfile</TabsTrigger>
-          <TabsTrigger value="docker-compose">docker-compose</TabsTrigger>
-          <TabsTrigger value="github-action">GitHub Action</TabsTrigger>
-          <TabsTrigger value="kubernetes">Kubernetes</TabsTrigger>
-          <TabsTrigger value="terraform">Terraform</TabsTrigger>
-          <TabsTrigger value="security">Sécurité</TabsTrigger>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-4">
+        <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-y-1' : isTablet ? 'grid-cols-3 gap-y-1' : 'md:grid-cols-6'}`}>
+          <TabsTrigger value="dockerfile" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>Dockerfile</TabsTrigger>
+          <TabsTrigger value="docker-compose" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>docker-compose</TabsTrigger>
+          <TabsTrigger value="github-action" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>GitHub Action</TabsTrigger>
+          <TabsTrigger value="kubernetes" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>Kubernetes</TabsTrigger>
+          <TabsTrigger value="terraform" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>Terraform</TabsTrigger>
+          <TabsTrigger value="security" className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}>Sécurité</TabsTrigger>
         </TabsList>
         
         <TabsContent value="dockerfile" className="bg-slate-900 p-4 rounded-lg h-[calc(100vh-260px)] sm:h-[500px] overflow-auto">

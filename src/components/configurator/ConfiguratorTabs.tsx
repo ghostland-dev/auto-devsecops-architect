@@ -9,7 +9,7 @@ import DeploymentStep from "@/components/configurator/DeploymentStep";
 import SecurityStep from "@/components/configurator/SecurityStep";
 import ProjectDetailsStep from "@/components/configurator/ProjectDetailsStep";
 import DeliveryMethodStep from "@/components/configurator/DeliveryMethodStep";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile, useIsTablet } from "@/hooks/use-mobile";
 
 interface ConfiguratorTabsProps {
   activeTab: string;
@@ -25,6 +25,7 @@ const ConfiguratorTabs = ({
   updateConfig
 }: ConfiguratorTabsProps) => {
   const isMobile = useIsMobile();
+  const isTablet = useIsTablet();
   
   const isTabDisabled = (tabId: string) => {
     switch (tabId) {
@@ -47,48 +48,49 @@ const ConfiguratorTabs = ({
   ];
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-y-1' : 'md:grid-cols-8'}`}>
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
+      <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2 gap-y-1' : isTablet ? 'grid-cols-4 gap-y-1' : 'md:grid-cols-8'}`}>
         {tabs.map(tab => (
           <TabsTrigger 
             key={tab.id}
             value={tab.id}
             disabled={isTabDisabled(tab.id)}
+            className={isMobile || isTablet ? 'text-xs py-1 px-2' : ''}
           >
             {tab.label}
           </TabsTrigger>
         ))}
       </TabsList>
       
-      <TabsContent value="project">
+      <TabsContent value="project" className="pt-4">
         <ProjectDetailsStep config={config} updateConfig={updateConfig} />
       </TabsContent>
       
-      <TabsContent value="language">
+      <TabsContent value="language" className="pt-4">
         <LanguageFrameworkStep config={config} updateConfig={updateConfig} />
       </TabsContent>
 
-      <TabsContent value="language-details">
+      <TabsContent value="language-details" className="pt-4">
         <LanguageDetailsStep config={config} updateConfig={updateConfig} />
       </TabsContent>
       
-      <TabsContent value="cicd">
+      <TabsContent value="cicd" className="pt-4">
         <CiCdStep config={config} updateConfig={updateConfig} />
       </TabsContent>
       
-      <TabsContent value="cloud">
+      <TabsContent value="cloud" className="pt-4">
         <CloudProviderStep config={config} updateConfig={updateConfig} />
       </TabsContent>
       
-      <TabsContent value="deployment">
+      <TabsContent value="deployment" className="pt-4">
         <DeploymentStep config={config} updateConfig={updateConfig} />
       </TabsContent>
       
-      <TabsContent value="security">
+      <TabsContent value="security" className="pt-4">
         <SecurityStep config={config} updateConfig={updateConfig} />
       </TabsContent>
 
-      <TabsContent value="delivery">
+      <TabsContent value="delivery" className="pt-4">
         <DeliveryMethodStep config={config} updateConfig={updateConfig} />
       </TabsContent>
     </Tabs>
