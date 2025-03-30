@@ -2,8 +2,6 @@
 import React from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
 
 interface NotesInputProps {
   value: string;
@@ -20,12 +18,6 @@ const NotesInput = ({
   placeholder = "Ajoutez des notes ou des détails supplémentaires...",
   description = "Ces informations seront incluses dans la documentation générée."
 }: NotesInputProps) => {
-  const form = useForm({
-    defaultValues: {
-      notes: value
-    }
-  });
-
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value);
   };
