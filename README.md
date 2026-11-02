@@ -1,5 +1,7 @@
 # DevSecOps Architect
 
+[![CI](https://github.com/ghostland-dev/auto-devsecops-architect/actions/workflows/ci.yml/badge.svg)](https://github.com/ghostland-dev/auto-devsecops-architect/actions/workflows/ci.yml)
+
 Configurator that designs DevSecOps pipelines per organisation and project.
 
 ## Features
