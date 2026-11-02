@@ -370,7 +370,7 @@ module "vpc" {
 # Security Groups
 resource "aws_security_group" "app" {
   name        = "${resourcePrefix}-app-sg"
-  description = "Security group for ${var.app_name} application"
+  description = "Security group for \${var.app_name} application"
   vpc_id      = module.vpc.vpc_id
 
   ingress {
